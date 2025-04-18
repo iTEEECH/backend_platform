@@ -1,0 +1,7 @@
+name: backend_platform
+
+environment:
+  sdk: ^3.6.1
+
+dev_dependencies:
+  melos: 6.3.2

@@ -1,0 +1,105 @@
+name: backend_platform
+repository:
+  type: github
+  origin: https://github.com/iTEEECH/backend_platform.git
+  owner: iTEEECH
+  name: backend_platform
+
+packages:
+  - apps/**
+
+command:
+  version:
+    # Generate commit links in package changelogs.
+    linkToCommits: true
+    # # Only allow versioning to happen on main branch.
+    # branch: main
+    # Additionally build a changelog at the root of the workspace.
+    workspaceChangelog: true
+
+  bootstrap:
+    runPubGetInParallel: false
+    usePubspecOverrides: true
+
+    environment:
+      sdk: ^3.6.1
+
+    dependencies:
+      flutter:
+        sdk: flutter
+      flutter_web_plugins:
+        sdk: flutter
+
+      # https://pub.dev/packages/amplify_auth_cognito
+      amplify_auth_cognito: 2.6.1
+      # https://pub.dev/packages/amplify_authenticator
+      amplify_authenticator:  2.3.3
+      # https://pub.dev/packages/amplify_flutter
+      amplify_flutter: 2.6.1
+      # https://pub.dev/packages/analyzer
+      analyzer: 7.0.0
+      # https://pub.dev/packages/appwrite
+      appwrite: 14.0.0
+      # https://pub.dev/packages/cupertino_icons
+      cupertino_icons: 1.0.8
+      # https://pub.dev/packages/equatable
+      equatable: 2.0.7
+      # https://pub.dev/packages/flutter_hooks
+      flutter_hooks: 0.21.2
+      # https://pub.dev/packages/go_router
+      go_router: 14.8.1
+      # https://pub.dev/packages/hooks_riverpod
+      hooks_riverpod: 2.6.1
+      # https://pub.dev/packages/http
+      http: 1.3.0
+      # https://pub.dev/packages/riverpod_annotation
+      riverpod_annotation: 2.6.1
+      # https://pub.dev/packages/supabase_flutter
+      supabase_flutter: 2.8.4
+
+    dev_dependencies:
+      flutter_test:
+        sdk: flutter
+
+      # https://pub.dev/packages/build_runner
+      build_runner: 2.4.15
+      # https://pub.dev/packages/flutter_lints
+      flutter_lints: 5.0.0
+      # https://pub.dev/packages/riverpod_generator
+      riverpod_generator: 2.6.5
+
+  clean:
+    hooks:
+      post: |
+        melos exec -c 1 -- "flutter clean"
+
+scripts:
+  analyze:
+    description: Run `dart analyze` for all packages.
+    run: dart analyze .
+    exec:
+      concurrency: 1
+
+  generate:
+    description: Run `dart run build_runner build --delete-conflicting-outputs` for all packages.
+    run: dart run build_runner build --delete-conflicting-outputs
+    exec:
+      concurrency: 1
+      failFast: true
+    packageFilters:
+      flutter: true
+      dependsOn: build_runner
+      
+  pub:get:
+    description: Run `flutter pub get` for all packages.
+    run: flutter pub get
+
+  test:unit:
+    description: Run `flutter test` for all packages.
+    run: flutter test
+    exec:
+      concurrency: 1
+      failFast: true
+    packageFilters:
+      dirExists:
+        - test
